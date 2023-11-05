@@ -1,4 +1,4 @@
-#Barbershop Database Management Application.
+**#Barbershop Database Management Application.**
 
 This is a barbershop database management application, done as the final project for the Basic of Database course at LUT University.
 
