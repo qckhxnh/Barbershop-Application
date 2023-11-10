@@ -7,7 +7,7 @@ def connect():
         host="localhost",
         database="barbershop",
         user="postgres",
-        password="phonglan4455"
+        password="Quockhanh2004@"
     )
     return conn
 
@@ -41,7 +41,6 @@ for row in service:
 
 
 list_barber_layout = [
-    [sg.Text('This is layout of barber name')],
     [sg.Table(
         values=data,
         headings=headers,
@@ -54,7 +53,6 @@ list_barber_layout = [
 ]
 
 list_service_layout = [
-    [sg.Text("This is layout of service")],
     [sg.Table(
         values=data1,
         headings=headers1,
@@ -66,7 +64,6 @@ list_service_layout = [
 ]
 
 make_an_appointment_layout = [
-    [sg.Text("This is layout of make a appointment")],
     [sg.Text("Enter ID number of the barber you want to book")],
     [sg.Input(key="BARBER ID")],
     [sg.Text("Enter ID number of the service you want to book")],
@@ -81,7 +78,6 @@ make_an_appointment_layout = [
 ]
 
 edit_your_appointment_layout = [
-    [sg.Text("This is layout of edit your appointment")],
     [sg.Text("Enter your appointment ID")],
     [sg.Input(key='-APPOINTEMENT ID-')],   
     [sg.Text("Enter ID number of the barber you want to book")],
@@ -98,7 +94,6 @@ edit_your_appointment_layout = [
 ]
 
 cancel_your_appointment_layout = [
-    [sg.Text("This is layout of cancel")],
     [sg.Text("Enter your appointment ID")],
     [sg.Input(key='-APPOINTEMENT ID 2-')], 
     [sg.Button("Cancel")],
@@ -110,6 +105,7 @@ def list_appointment():
     cur = conn.cursor()
     cur.execute(f"Select id from customer where email = '{email}'")
     customer_id = cur.fetchone()[0]
+    cur.execute("CREATE INDEX cust_name ON customer(customer.name)")
     cur.execute(f'select customer.name, appointment.id, barber.name, appointmentdate, appointmenttime, service.name, service.price from appointment join service on appointment.service_id = service.id join customer on appointment.customer_id = customer.id join barber on appointment.barber_id = barber.id where customer.id={customer_id}')
     app_list = cur.fetchall()
     if app_list is not None:
@@ -120,7 +116,6 @@ headers2 = ['Customer Name', 'Appointment ID', 'Barber Name', 'Appointment Date'
 data2 = []
 
 list_your_appointment_layout = [
-    [sg.Text("This is layout of list appointment")],
     [sg.Text('Please enter your customer ID')],
         [sg.InputText(key = "-CUS ID-")],
         [sg.Button("Search")],
@@ -161,7 +156,7 @@ def create_password_layout():
 
 def main_layout():
     layout = [
-    [sg.Text("Welcome to the BCS shop")],
+    [sg.Text("Welcome to the Grooming shop")],
     [sg.Button("List barber"), sg.Button("List service"), sg.Button("Make an appointment"), sg.Button("Edit your appointment"), sg.Button("Cancel your appointment"), sg.Button("List your appointment")],
     [
     sg.Column(list_barber_layout, visible=False, key='-COL2-'),
@@ -282,7 +277,6 @@ while True:
                             conn.commit()
                             window['-RESULT2-'].update(visible= True)
                             window['-RESULT2-'].update("Your appointment has been booked!")
-                        #temp = 4
 
                     elif event == "Edit your appointment":
                         window[f'-COL{temp}-'].update(visible = False)
@@ -318,7 +312,6 @@ while True:
                                 conn.commit()
                                 window['-RESULT3-'].update(visible= True)
                                 window['-RESULT3-'].update('Your appointment has been updated!')
-                        #temp = 5
 
                     elif event == "Cancel your appointment":
                         window[f'-COL{temp}-'].update(visible = False)
@@ -342,7 +335,6 @@ while True:
                             conn.close()
                             window['-RESULT4-'].update(visible= True)
                             window['-RESULT4-'].update("Your appointment has been cancelled!")
-                        #temp = 6
 
                     elif event == "List your appointment":
                         window[f'-COL{temp}-'].update(visible = False)
@@ -368,5 +360,4 @@ while True:
                             for row in app_list:
                                 data2.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6]])
                                 window['-TABLE2-'].update(values=data2)
-                        #temp = 7
                 window.close()
